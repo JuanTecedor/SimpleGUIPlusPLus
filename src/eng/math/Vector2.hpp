@@ -81,7 +81,7 @@ public:
     [[nodiscard]] Vector2 projected_onto(const Vector2<T> & axis) const
     {
         static_assert(std::is_floating_point_v<T>);
-        assert(axis != Vector2<T>());
+        assert(axis != Vector2<T>{});
         return dot(axis) / axis.lengthSq() * axis;
     }
 
