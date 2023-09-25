@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        clang libsdl2 cmake build-essential \
+        clang libsdl2-dev libsdl2-image-dev cmake build-essential \
     && cd SimpleGUI++ \
     && mkdir build \
     && cmake -S/home/juan/Dev/SimpleGUI++ -B/home/juan/Dev/SimpleGUI++/build \
