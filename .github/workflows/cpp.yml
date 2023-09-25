@@ -1,0 +1,24 @@
+name: Cpp package
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Apt get
+        run: |
+          sudo apt-get install clang libsdl2 cmake -y
+      - name: Build
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          cmake --build .
+      - name: Run
+        run: |
+          cd build
+          ./SimpleGUI++
