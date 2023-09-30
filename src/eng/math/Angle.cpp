@@ -20,5 +20,18 @@ float Angle::as_radians() const
 Angle Angle::operator+=(const Angle & rhs) noexcept
 {
     m_degrees += rhs.m_degrees;
+    adjust_bounds();
     return *this;
+}
+
+void Angle::adjust_bounds() noexcept
+{
+    if(m_degrees >= FULL_CIRCLE_DEG)
+    {
+        m_degrees -= FULL_CIRCLE_DEG;
+    }
+    else if(m_degrees <= -FULL_CIRCLE_DEG)
+    {
+        m_degrees += FULL_CIRCLE_DEG;
+    }
 }

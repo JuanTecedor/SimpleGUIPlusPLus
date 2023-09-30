@@ -2,6 +2,7 @@
 #define ANGLE_HPP
 
 #include <compare>
+#include <numbers>
 
 class Angle
 {
@@ -27,7 +28,12 @@ public:
     Angle operator+=(const Angle & rhs) noexcept;
 private:
     float m_degrees = {};
-    constexpr static inline auto HALF_CIRCLE_DEG = 180;
+    void adjust_bounds() noexcept;
+public:
+    constexpr static inline auto HALF_CIRCLE_DEG = 180.F;
+    constexpr static inline auto FULL_CIRCLE_DEG = 360.F;
+    constexpr static inline auto THREE_QUARTER_CIRCLE_DEG = 270.F;
+    constexpr static inline auto ONE_POINT_FIVE_PI = 1.5F * std::numbers::pi_v<float>;
 };
 
 #endif

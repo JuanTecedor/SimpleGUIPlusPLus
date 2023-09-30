@@ -5,6 +5,11 @@ include(Catch)
 
 add_executable(
     TestSimpleGUI++
+
+    src/eng/math/Vector2.hpp
+    src/eng/math/Angle.hpp
+    src/eng/math/Angle.cpp
+
     test/eng/math/TestAngle.cpp
 )
 
