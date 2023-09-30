@@ -38,3 +38,13 @@ TEST_CASE("Angle Sum")
     angle1 += angle2;
     REQUIRE_THAT(angle1.as_degrees(), WithinRel(0.F));
 }
+
+TEST_CASE("Angle comparison")
+{
+    auto angle1 = Angle::from_degrees(0.F);
+    auto angle2 = Angle::from_degrees(Angle::HALF_CIRCLE_DEG);
+    REQUIRE(angle1 < angle2);
+    REQUIRE(angle2 >= angle1);
+    REQUIRE(angle1 != angle2);
+    REQUIRE(angle2 == Angle::from_degrees(Angle::HALF_CIRCLE_DEG));
+}

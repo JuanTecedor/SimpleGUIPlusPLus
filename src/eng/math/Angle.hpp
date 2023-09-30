@@ -21,10 +21,14 @@ public:
 
     [[nodiscard]] static Angle from_radians(const float & angle);
     
-    [[nodiscard]] float as_degrees() const;
+    [[nodiscard]] float as_degrees() const noexcept
+    {
+        return m_degrees;
+    }
+
     [[nodiscard]] float as_radians() const;
 
-    auto operator<=>(const Angle & rhs) const = default;
+    auto operator<=>(const Angle &) const = default;  // NOLINT Bug https://reviews.llvm.org/D95714?id=320393
     Angle operator+=(const Angle & rhs) noexcept;
 private:
     float m_degrees = {};

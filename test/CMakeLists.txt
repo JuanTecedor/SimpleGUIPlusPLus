@@ -11,6 +11,7 @@ add_executable(
     src/eng/math/Angle.cpp
 
     test/eng/math/TestAngle.cpp
+    test/eng/math/TestVector.cpp
 )
 
 target_link_libraries(
