@@ -98,3 +98,5 @@ target_compile_options(
     -Wformat=2
     -Wimplicit-fallthrough
 )
+
+include(test/CMakeLists.txt)
