@@ -6,7 +6,3 @@ TEST_CASE( "Factorials are computed", "[factorial]" ) {
     constexpr auto number = 2;
     REQUIRE( number == 2 );
 }
-
-TEST_CASE( "Error" ) {
-    REQUIRE(false);
-}
