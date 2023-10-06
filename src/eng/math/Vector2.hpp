@@ -3,6 +3,7 @@
 
 #include <type_traits>
 #include <cmath>
+#include <cassert>
 
 #include "Angle.hpp"
 
@@ -12,7 +13,7 @@ class Vector2
 public:
     constexpr Vector2() = default;
 
-    constexpr Vector2(const T & p_x, const T & p_y) :
+    constexpr Vector2(const T & p_x, const T & p_y) noexcept :
         x{p_x}, y{p_y}
     {
     }
@@ -32,7 +33,6 @@ public:
 
     [[nodiscard]] constexpr T length() const
     {
-        static_assert(std::is_floating_point_v<T>);
         return std::sqrt(x * x + y * y);
     }
 
@@ -46,22 +46,28 @@ public:
         return Vector2<T>{-y, x};
     }
 
-    [[nodiscard]] constexpr T dot(const Vector2 & rhs) const
+    [[nodiscard]] constexpr T dot(const Vector2<T> & rhs) const
     {
         return x * rhs.x + y * rhs.y;
     }
 
-    [[nodiscard]] constexpr T cross(const Vector2 & rhs) const
-    {
-        return x * rhs.y - y * rhs.x;
-    }
-
     [[nodiscard]] Vector2 normalized() const
     {
-        static_assert(std::is_floating_point_v<T>);
-        assert(*this != Vector2<T>{});
-        return (*this) / length();
+        check_length_dbg();
+        return Vector2<T>(*this) / length();
     }
+
+    void normalize()
+    {
+        check_length_dbg();
+        (*this) /= length();
+    }
+private:
+    void check_length_dbg() const
+    {
+        assert(x != T{} || y != T{});
+    }
+public:
 
     [[nodiscard]] Angle angle_to(const Vector2 & rhs) const
     {
@@ -128,7 +134,7 @@ public:
         return dot(rhs);
     }
 
-    template <typename U>
+    template <typename U> requires (std::integral<U> or std::floating_point<U>)
     [[nodiscard]] constexpr Vector2 operator/(const U & scalar) const noexcept {
         return {x / scalar, y / scalar};
     }
@@ -145,7 +151,7 @@ public:
         return *this;
     }
 
-    template <typename U>
+    template <typename U> requires (std::integral<U> or std::floating_point<U>)
     constexpr Vector2 operator*=(const U & scalar) noexcept {
         x *= scalar;
         y *= scalar;
@@ -171,12 +177,6 @@ template <typename T>
 constexpr Vector2<T> operator*(const T & scalar, const Vector2<T> & rhs) noexcept
 {
     return rhs * scalar;
-}
-
-template <typename T>
-constexpr Vector2<T> operator/(const T & scalar, const Vector2<T> & rhs) noexcept
-{
-    return scalar / rhs;
 }
 
 using Vector2i = Vector2<int>;
