@@ -34,10 +34,20 @@ private:
     float m_degrees = {};
     void adjust_bounds() noexcept;
 public:
+    constexpr static inline auto QUARTER_DEG = 90.F;
+    constexpr static inline auto THREE_QUARTER_CIRCLE_DEG = 270.F;
     constexpr static inline auto HALF_CIRCLE_DEG = 180.F;
     constexpr static inline auto FULL_CIRCLE_DEG = 360.F;
-    constexpr static inline auto THREE_QUARTER_CIRCLE_DEG = 270.F;
     constexpr static inline auto ONE_POINT_FIVE_PI = 1.5F * std::numbers::pi_v<float>;
+    const static Angle NO_ROTATION;
+    const static Angle QUARTER_ROTATION;
+    const static Angle HALF_ROTATION;
+    const static Angle THREE_QUARTER_ROTATION;
 };
+
+constexpr inline Angle Angle::NO_ROTATION = Angle::from_degrees(0.0F);
+constexpr inline Angle Angle::QUARTER_ROTATION = Angle::from_degrees(Angle::QUARTER_DEG);
+constexpr inline Angle Angle::HALF_ROTATION = Angle::from_degrees(Angle::HALF_CIRCLE_DEG);
+constexpr inline Angle Angle::THREE_QUARTER_ROTATION = Angle::from_degrees(Angle::THREE_QUARTER_CIRCLE_DEG);
 
 #endif

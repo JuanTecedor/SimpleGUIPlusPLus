@@ -7,6 +7,8 @@
 #include <vector>
 #include <functional>
 #include <memory>
+#include <string_view>
+#include <optional>
 
 #include <SDL2/SDL.h>
 
@@ -15,14 +17,9 @@
 class TextureStorage
 {
 public:
-    using TexturePath = struct {
-        std::string texture_name;
-        std::filesystem::path path;
-    };
-    using TexturePaths = std::vector<TexturePath>;
-    using TextureConfig = struct {
-        std::filesystem::path & base_path;
-        TexturePaths texture_paths;
+    struct TextureConfig
+    {
+        std::optional<std::filesystem::path> base_path = std::nullopt;
     };
 
     explicit TextureStorage(
@@ -36,7 +33,9 @@ public:
     TextureStorage operator=(TextureStorage) = delete;
     TextureStorage& operator=(TextureStorage&&) = delete;
 
-    Texture & get(const std::string & texture_type);
+    Texture * get(const std::string & texture_type);
+
+    constexpr static inline std::string ERROR_TEXTURE = "ERROR";
 private:
     std::unordered_map<std::string, std::unique_ptr<Texture>> m_textures;
 };

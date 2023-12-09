@@ -136,7 +136,7 @@ public:
 
     template <typename U> requires (std::integral<U> or std::floating_point<U>)
     [[nodiscard]] constexpr Vector2 operator/(const U & scalar) const noexcept {
-        return {x / scalar, y / scalar};
+        return {x / static_cast<T>(scalar), y / static_cast<T>(scalar)};
     }
 
     constexpr Vector2 operator+=(const Vector2 & rhs) noexcept {

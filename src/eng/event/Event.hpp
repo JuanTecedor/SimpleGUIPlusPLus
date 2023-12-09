@@ -6,20 +6,43 @@
 #include <variant>
 
 struct ExitEvent{};
-struct MoveCameraEvent
+
+// TODO, pack the following two in one?
+
+struct ArroyKeysEvent
 {
     Direction direction;
 };
 
-struct MovePlayerEvent
+struct WASDKeysEvent
 {
     Direction direction;
+};
+
+struct MouseWheelEvent
+{
+    int y;
+};
+
+struct MouseMotionEvent
+{
+    int x;
+    int y;
+};
+
+struct LeftMouseClickEvent
+{
+    int x;
+    int y;
 };
 
 using Event = std::variant<
     ExitEvent,
-    MoveCameraEvent,
-    MovePlayerEvent
+    ArroyKeysEvent,
+    WASDKeysEvent,
+    MouseWheelEvent,
+    MouseMotionEvent,
+    LeftMouseClickEvent
 >;
 
 #endif

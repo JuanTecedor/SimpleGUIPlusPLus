@@ -10,7 +10,7 @@ Window::Window(const std::string & name, const SDL_DisplayMode & display_mode) :
             SDL_WINDOWPOS_UNDEFINED,
             display_mode.w,
             display_mode.h,
-            SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_BORDERLESS
+            SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI
         )
     }
 {

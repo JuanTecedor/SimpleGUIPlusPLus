@@ -9,7 +9,19 @@ Graphics::Graphics(const std::string & window_name, const TextureStorage::Textur
     m_display_mode{create_display_mode()},
     m_window{window_name, m_display_mode},
     m_renderer{m_window.window},
-    m_camera{{0, 0}, {0, 0}},
+    m_camera{
+        .position{0, 0},
+        .velocity{0, 0},
+        .view_port{
+            Camera::STARTING_VIEWPORT_SIZE_X,
+            Camera::STARTING_VIEWPORT_SIZE_X * static_cast<float>(window_height()) / static_cast<float>(window_width())
+        },
+        .starting_view_port{
+            Camera::STARTING_VIEWPORT_SIZE_X,
+            Camera::STARTING_VIEWPORT_SIZE_X * static_cast<float>(window_height()) / static_cast<float>(window_width())
+        },
+        .zoom=Camera::STARTING_ZOOM 
+    },
     texture_storage{m_renderer.renderer, texture_config}
 {
 }
@@ -166,35 +178,48 @@ void Graphics::present() const
 
 PositionF Graphics::screen_to_world(const Position & position) const
 {
-    auto res = PositionF{position};
-    auto window_transform = PositionF{
-        static_cast<float>(window_width()) / 2,
-        static_cast<float>(window_height()) / 2
+    auto screen_pos = Position{
+        position.x,
+        window_height() - position.y
     };
-    res -= window_transform;
-    res.y *= -1;
-    res = res + m_camera.position;
+    auto percent_screen = PositionF{
+        static_cast<float>(screen_pos.x) / static_cast<float>(window_width()),
+        static_cast<float>(screen_pos.y) / static_cast<float>(window_height())
+    };
+    auto result_world_delta = PositionF{
+        percent_screen.x * m_camera.view_port.x,
+        percent_screen.y * m_camera.view_port.y
+    };
+    auto res = result_world_delta + m_camera.position - m_camera.view_port / 2;
+    assert(m_camera.inside_view_port(res));
     return res;
 }
 
 Position Graphics::world_to_screen(const PositionF & position) const
 {
-    return world_to_screen(Position{
-        static_cast<int>(std::round(position.x)),
-        static_cast<int>(std::round(position.y))
-    });
+    auto delta = position - m_camera.position;
+    auto delta_view_port = PositionF{
+        delta.x + (m_camera.view_port.x / 2),
+        delta.y + (m_camera.view_port.y / 2)
+    };
+    auto percent_view_port = PositionF{
+        delta_view_port.x / m_camera.view_port.x,
+        delta_view_port.y / m_camera.view_port.y
+    };
+    auto pos = Position{
+        static_cast<int>(static_cast<float>(window_width()) * percent_view_port.x),
+        window_height() - static_cast<int>(static_cast<float>(window_height()) * percent_view_port.y)
+    };
+    auto res = Position{
+        pos.x,
+        pos.y
+    };
+    return res;
 }
 
 Position Graphics::world_to_screen(const Position & position) const
 {
-    auto window_transform = PositionF{
-        static_cast<float>(window_width()) / 2,
-        static_cast<float>(window_height()) / 2
-    };
-    auto res = Position{PositionF{position} - m_camera.position + window_transform};
-    res.y *= -1;
-    res.y += window_height();
-    return res;
+    return world_to_screen(PositionF{position});
 }
 
 int Graphics::window_width() const noexcept

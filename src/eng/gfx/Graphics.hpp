@@ -32,7 +32,7 @@ private:
     [[nodiscard]] static SDL_DisplayMode create_display_mode();
 public:
     void clear() const;
-    void set_color(const Color & color = Color::white()) const;
+    void set_color(const Color & color = Color::WHITE) const;
     
     void draw_primitive(const GraphicsPrimitives::Point & point) const;
     void draw_primitive(const GraphicsPrimitives::Line & line) const;
